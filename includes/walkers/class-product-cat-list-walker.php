@@ -1,18 +1,14 @@
 <?php
 /**
- * WC_Product_Cat_List_Walker class
+ * Legacy WC_Product_Cat_List_Walker file
  *
- * @extends 	Walker
- * @class 		WC_Product_Cat_Dropdown_Walker
- * @version		2.3.0
- * @package		WooCommerce/Classes/Walkers
- * @author 		WooThemes
+ * @package WooCommerce/Classes/Walkers
+ * @deprecated 3.4.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
-}
+defined( 'ABSPATH' ) || exit;
 
+<<<<<<< HEAD
 if ( ! class_exists( 'WC_Product_Cat_List_Walker', false ) ) :
 
 class WC_Product_Cat_List_Walker extends Walker {
@@ -151,3 +147,6 @@ class WC_Product_Cat_List_Walker extends Walker {
 }
 
 endif;
+=======
+require dirname( __FILE__ ) . '/class-wc-product-cat-list-walker.php';
+>>>>>>> 4ad0fbd5217e8fc7ecb454fbed049b6092b28464

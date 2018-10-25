@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * jQuery FlexSlider v2.6.1
+=======
+ * jQuery FlexSlider v2.7.1
+>>>>>>> 4ad0fbd5217e8fc7ecb454fbed049b6092b28464
  * Copyright 2012 WooThemes
  * Contributing Author: Tyler Smith
  */
@@ -23,7 +27,7 @@
     var namespace = slider.vars.namespace,
         msGesture = window.navigator && window.navigator.msPointerEnabled && window.MSGesture,
         touch = (( "ontouchstart" in window ) || msGesture || window.DocumentTouch && document instanceof DocumentTouch) && slider.vars.touch,
-        // depricating this idea, as devices are being released with both of these events
+        // deprecating this idea, as devices are being released with both of these events
         eventType = "click touchend MSPointerUp keyup",
         watchedEvent = "",
         watchedEventClearTimer,
@@ -75,6 +79,7 @@
           }
           return false;
         }());
+        slider.isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
         slider.ensureAnimationEnd = '';
         // CONTROLSCONTAINER:
         if (slider.vars.controlsContainer !== "") slider.controlsContainer = $(slider.vars.controlsContainer).length > 0 && $(slider.vars.controlsContainer);
@@ -894,11 +899,15 @@
               }
             }());
 
-            return (posCalc * -1) + "px";
+            return (posCalc * ((slider.vars.rtl)?1:-1)) + "px";
           }());
 
       if (slider.transitions) {
+<<<<<<< HEAD
         target = (vertical) ? "translate3d(0," + target + ",0)" : "translate3d(" + ((slider.vars.rtl?-1:1)*parseInt(target)+'px') + ",0,0)";
+=======
+        target = (vertical) ? "translate3d(0," + target + ",0)" : "translate3d(" + (parseInt(target)+'px') + ",0,0)";
+>>>>>>> 4ad0fbd5217e8fc7ecb454fbed049b6092b28464
         dur = (dur !== undefined) ? (dur/1000) + "s" : "0s";
         slider.container.css("-" + slider.pfx + "-transition-duration", dur);
          slider.container.css("transition-duration", dur);
@@ -954,7 +963,11 @@
           setTimeout(function(){
             slider.doMath();
           if(slider.vars.rtl){
+<<<<<<< HEAD
               slider.newSlides.css({"width": slider.computedW, "marginLeft" : slider.computedM, "float": "right", "display": "block"});
+=======
+              slider.newSlides.css({"width": slider.computedW, "marginRight" : slider.computedM, "float": "right", "display": "block"});
+>>>>>>> 4ad0fbd5217e8fc7ecb454fbed049b6092b28464
            }
             else{
               slider.newSlides.css({"width": slider.computedW, "marginRight" : slider.computedM, "float": "left", "display": "block"});
@@ -1000,6 +1013,7 @@
           maxItems = slider.vars.maxItems;
 
       slider.w = (slider.viewport===undefined) ? slider.width() : slider.viewport.width();
+      if (slider.isFirefox) { slider.w = slider.width(); }
       slider.h = slide.height();
       slider.boxPadding = slide.outerWidth() - slide.width();
 
@@ -1176,6 +1190,9 @@
     maxItems: 0,                    //{NEW} Integer: Maxmimum number of carousel items that should be visible. Items will resize fluidly when above this limit.
     move: 0,                        //{NEW} Integer: Number of carousel items that should move on animation. If 0, slider will move all visible items.
     allowOneSlide: true,           //{NEW} Boolean: Whether or not to allow a slider comprised of a single slide
+
+    // Browser Specific
+    isFirefox: false,             // {NEW} Boolean: Set to true when Firefox is the browser used.
 
     // Callback API
     start: function(){},            //Callback: function(slider) - Fires when the slider loads the first slide

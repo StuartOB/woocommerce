@@ -4,27 +4,26 @@
  *
  * Handles requests to the /system_status/tools/* endpoints.
  *
- * @author   WooThemes
- * @category API
- * @package  WooCommerce/API
- * @since    3.0.0
+ * @package WooCommerce/API
+ * @since   3.0.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
+ * System status tools controller.
+ *
  * @package WooCommerce/API
- * @extends WC_REST_Controller
+ * @extends WC_REST_System_Status_Tools_V2_Controller
  */
-class WC_REST_System_Status_Tools_Controller extends WC_REST_Controller {
+class WC_REST_System_Status_Tools_Controller extends WC_REST_System_Status_Tools_V2_Controller {
 
 	/**
 	 * Endpoint namespace.
 	 *
 	 * @var string
 	 */
+<<<<<<< HEAD
 	protected $namespace = 'wc/v2';
 
 	/**
@@ -481,4 +480,7 @@ class WC_REST_System_Status_Tools_Controller extends WC_REST_Controller {
 
 		return array( 'success' => $ran, 'message' => $message );
 	}
+=======
+	protected $namespace = 'wc/v3';
+>>>>>>> 4ad0fbd5217e8fc7ecb454fbed049b6092b28464
 }

@@ -2,6 +2,7 @@
 /**
  * Plugin Name: WooCommerce
  * Plugin URI: https://woocommerce.com/
+<<<<<<< HEAD
  * Description: An e-commerce toolkit that helps you sell anything. Beautifully.
  * Version: 3.2.5
  * Author: Automattic
@@ -9,12 +10,16 @@
  * Requires at least: 4.4
  * Tested up to: 4.9
  *
+=======
+ * Description: An eCommerce toolkit that helps you sell anything. Beautifully.
+ * Version: 3.5.0-rc.1
+ * Author: Automattic
+ * Author URI: https://woocommerce.com
+>>>>>>> 4ad0fbd5217e8fc7ecb454fbed049b6092b28464
  * Text Domain: woocommerce
  * Domain Path: /i18n/languages/
  *
  * @package WooCommerce
- * @category Core
- * @author Automattic
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

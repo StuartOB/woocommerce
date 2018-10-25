@@ -32,7 +32,11 @@ $text_align = is_rtl() ? 'right' : 'left';
 				<?php if ( $order->get_billing_phone() ) : ?>
 					<br/><?php echo esc_html( $order->get_billing_phone() ); ?>
 				<?php endif; ?>
+<<<<<<< HEAD
 				<?php if ( $order->get_billing_email() ): ?>
+=======
+				<?php if ( $order->get_billing_email() ) : ?>
+>>>>>>> 4ad0fbd5217e8fc7ecb454fbed049b6092b28464
 					<p><?php echo esc_html( $order->get_billing_email() ); ?></p>
 				<?php endif; ?>
 			</address>

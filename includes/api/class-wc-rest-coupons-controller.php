@@ -4,29 +4,26 @@
  *
  * Handles requests to the /coupons endpoint.
  *
- * @author   WooThemes
- * @category API
- * @package  WooCommerce/API
- * @since    2.6.0
+ * @package WooCommerce/API
+ * @since   2.6.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
  * REST API Coupons controller class.
  *
  * @package WooCommerce/API
- * @extends WC_REST_CRUD_Controller
+ * @extends WC_REST_Coupons_V2_Controller
  */
-class WC_REST_Coupons_Controller extends WC_REST_Legacy_Coupons_Controller {
+class WC_REST_Coupons_Controller extends WC_REST_Coupons_V2_Controller {
 
 	/**
 	 * Endpoint namespace.
 	 *
 	 * @var string
 	 */
+<<<<<<< HEAD
 	protected $namespace = 'wc/v2';
 
 	/**
@@ -535,4 +532,7 @@ class WC_REST_Coupons_Controller extends WC_REST_Legacy_Coupons_Controller {
 
 		return $params;
 	}
+=======
+	protected $namespace = 'wc/v3';
+>>>>>>> 4ad0fbd5217e8fc7ecb454fbed049b6092b28464
 }
