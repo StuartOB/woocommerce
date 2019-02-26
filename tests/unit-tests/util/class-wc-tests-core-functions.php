@@ -141,7 +141,7 @@ class WC_Tests_Core_Functions extends WC_Unit_Test_Case {
 			'NZD' => 'New Zealand dollar',
 			'OMR' => 'Omani rial',
 			'PAB' => 'Panamanian balboa',
-			'PEN' => 'Peruvian nuevo sol',
+			'PEN' => 'Sol',
 			'PGK' => 'Papua New Guinean kina',
 			'PHP' => 'Philippine peso',
 			'PKR' => 'Pakistani rupee',
@@ -182,6 +182,7 @@ class WC_Tests_Core_Functions extends WC_Unit_Test_Case {
 			'UYU' => 'Uruguayan peso',
 			'UZS' => 'Uzbekistani som',
 			'VEF' => 'Venezuelan bol&iacute;var',
+			'VES' => 'Bol&iacute;var soberano',
 			'VND' => 'Vietnamese &#x111;&#x1ed3;ng',
 			'VUV' => 'Vanuatu vatu',
 			'WST' => 'Samoan t&#x101;l&#x101;',
@@ -432,7 +433,7 @@ class WC_Tests_Core_Functions extends WC_Unit_Test_Case {
 
 		$this->assertEquals( print_r( $arr, true ), wc_print_r( $arr, true ) );
 		$this->assertEquals( var_export( $arr, true ), wc_print_r( $arr, true ) );
-		$this->assertEquals( json_encode( $arr ), wc_print_r( $arr, true ) );
+		$this->assertEquals( wp_json_encode( $arr ), wc_print_r( $arr, true ) );
 		$this->assertEquals( serialize( $arr ), wc_print_r( $arr, true ) );
 		$this->assertFalse( wc_print_r( $arr, true ) );
 
@@ -848,5 +849,48 @@ class WC_Tests_Core_Functions extends WC_Unit_Test_Case {
 		$example_user_agent         = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36';
 		$_SERVER['HTTP_USER_AGENT'] = $example_user_agent;
 		$this->assertEquals( $example_user_agent, wc_get_user_agent() );
+	}
+
+	/**
+	 * Test the wc_checkout_fields_uasort_comparison function.
+	 *
+	 * @return void
+	 */
+	public function test_wc_checkout_fields_uasort_comparison() {
+		$fields = array(
+			'billing_first_name' => array(
+				'priority' => 10,
+			),
+			'billing_last_name' => array(
+				'priority' => 20,
+			),
+			'billing_email' => array(
+				'priority' => 1,
+			),
+		);
+		uasort( $fields, 'wc_checkout_fields_uasort_comparison' );
+		$this->assertSame( 0, array_search( 'billing_email', array_keys( $fields ) ) );
+	}
+
+	/**
+	 * Test wc_ascii_uasort_comparison function
+	 *
+	 * @return void
+	 */
+	public function test_wc_ascii_uasort_comparison() {
+		$unsorted_values = array(
+			'Benin',
+			'Bélgica',
+		);
+
+		// First test a normal asort which does not work right for accented characters.
+		$sorted_values = $unsorted_values;
+		asort( $sorted_values );
+		$this->assertSame( array( 'Benin', 'Bélgica' ), array_values( $sorted_values ) );
+
+		$sorted_values = $unsorted_values;
+		// Now test the new wc_ascii_uasort_comparison function which sorts the strings correctly.
+		uasort( $sorted_values, 'wc_ascii_uasort_comparison' );
+		$this->assertSame( array( 'Bélgica', 'Benin' ), array_values( $sorted_values ) );
 	}
 }

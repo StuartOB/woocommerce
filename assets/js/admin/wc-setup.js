@@ -102,6 +102,7 @@ jQuery( function( $ ) {
 		description.find( '.shipping-method-description' ).addClass( 'hide' );
 		description.find( '.' + selectedMethod ).removeClass( 'hide' );
 
+		var $checkbox = zone.parent().find( 'input[type="checkbox"]' );
 		var settings = zone.find( '.shipping-method-settings' );
 		settings
 			.find( '.shipping-method-setting' )
@@ -112,6 +113,7 @@ jQuery( function( $ ) {
 			.find( '.' + selectedMethod )
 			.removeClass( 'hide' )
 			.find( '.shipping-method-required-field' )
+<<<<<<< HEAD
 			.prop( 'required', true );
 <<<<<<< HEAD
 	} );
@@ -122,6 +124,9 @@ jQuery( function( $ ) {
 		$( this )
 			.closest( '.wc-wizard-service-item' )
 =======
+=======
+			.prop( 'required', $checkbox.prop( 'checked' ) );
+>>>>>>> 176965d13952e65e432cfe27ac9831eb116308af
 	} ).find( '.wc-wizard-shipping-method-select .method' ).change();
 
 	$( '.wc-wizard-services' ).on( 'change', '.wc-wizard-shipping-method-enable', function() {

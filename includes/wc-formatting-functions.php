@@ -229,6 +229,7 @@ function wc_round_tax_total( $value, $precision = null ) {
 
 	if ( version_compare( PHP_VERSION, '5.3.0', '>=' ) ) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		$rounded_tax = round( $value, $precision, wc_get_tax_rounding_mode() );
 	} else {
 		// Fake it in PHP 5.2.
@@ -245,6 +246,9 @@ function wc_round_tax_total( $value, $precision = null ) {
 		}
 =======
 		$rounded_tax = round( $value, $precision, wc_get_tax_rounding_mode() ); // phpcs:ignore PHPCompatibility.PHP.NewFunctionParameters.round_modeFound
+=======
+		$rounded_tax = round( $value, $precision, wc_get_tax_rounding_mode() ); // phpcs:ignore PHPCompatibility.FunctionUse.NewFunctionParameters.round_modeFound
+>>>>>>> 176965d13952e65e432cfe27ac9831eb116308af
 	} elseif ( 2 === wc_get_tax_rounding_mode() ) {
 		$rounded_tax = wc_legacy_round_half_down( $value, $precision );
 	} else {
@@ -399,7 +403,7 @@ function wc_clean( $var ) {
 }
 
 /**
- * wp_check_invalid_utf8 with recursive array support.
+ * Function wp_check_invalid_utf8 with recursive array support.
  *
  * @param string|array $var Data to sanitize.
  * @return string|array
@@ -433,7 +437,8 @@ function wc_sanitize_textarea( $var ) {
 function wc_sanitize_tooltip( $var ) {
 	return htmlspecialchars(
 		wp_kses(
-			html_entity_decode( $var ), array(
+			html_entity_decode( $var ),
+			array(
 				'br'     => array(),
 				'em'     => array(),
 				'strong' => array(),
@@ -562,8 +567,10 @@ function wc_get_price_decimals() {
  */
 function wc_price( $price, $args = array() ) {
 	$args = apply_filters(
-		'wc_price_args', wp_parse_args(
-			$args, array(
+		'wc_price_args',
+		wp_parse_args(
+			$args,
+			array(
 				'ex_tax_label'       => false,
 				'currency'           => '',
 				'decimal_separator'  => wc_get_price_decimal_separator(),
@@ -951,6 +958,9 @@ function wc_format_postcode( $postcode, $country ) {
 		case 'US':
 			$postcode = rtrim( substr_replace( $postcode, '-', 5, 0 ), '-' );
 			break;
+		case 'NL':
+			$postcode = substr_replace( $postcode, ' ', 4, 0 );
+			break;
 	}
 
 	return apply_filters( 'woocommerce_format_postcode', $postcode, $country );
@@ -1053,7 +1063,8 @@ function wc_format_product_short_description( $content ) {
 
 		return wpautop(
 			$markdown->transform(
-				$content, array(
+				$content,
+				array(
 					'unslash' => false,
 				)
 			)
@@ -1253,7 +1264,7 @@ function wc_format_weight( $weight ) {
  * @return string
  */
 function wc_format_dimensions( $dimensions ) {
-	$dimension_string = implode( ' x ', array_filter( array_map( 'wc_format_localized_decimal', $dimensions ) ) );
+	$dimension_string = implode( ' &times; ', array_filter( array_map( 'wc_format_localized_decimal', $dimensions ) ) );
 
 	if ( ! empty( $dimension_string ) ) {
 		$dimension_string .= ' ' . get_option( 'woocommerce_dimension_unit' );
@@ -1387,6 +1398,23 @@ function wc_implode_html_attributes( $raw_attributes ) {
 }
 
 /**
+ * Escape JSON for use on HTML or attribute text nodes.
+ *
+ * @since 3.5.5
+ * @param string $json JSON to escape.
+ * @param bool   $html True if escaping for HTML text node, false for attributes. Determines how quotes are handled.
+ * @return string Escaped JSON.
+ */
+function wc_esc_json( $json, $html = false ) {
+	return _wp_specialchars(
+		$json,
+		$html ? ENT_NOQUOTES : ENT_QUOTES, // Escape quotes in attribute nodes only,
+		'UTF-8',                           // json_encode() outputs UTF-8 (really just ASCII), not the blog's charset.
+		true                               // Double escape entities: `&amp;` -> `&amp;amp;`
+	);
+}
+
+/**
  * Parse a relative date option from the settings API into a standard format.
  *
  * @since 3.4.0
@@ -1401,10 +1429,13 @@ function wc_parse_relative_date_option( $raw_value ) {
 		'years'  => __( 'Year(s)', 'woocommerce' ),
 	);
 
-	$value = wp_parse_args( (array) $raw_value, array(
-		'number' => '',
-		'unit'   => 'days',
-	) );
+	$value = wp_parse_args(
+		(array) $raw_value,
+		array(
+			'number' => '',
+			'unit'   => 'days',
+		)
+	);
 
 	$value['number'] = ! empty( $value['number'] ) ? absint( $value['number'] ) : '';
 

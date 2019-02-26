@@ -118,8 +118,12 @@ class WC_Gateway_Paypal_PDT_Handler extends WC_Gateway_Paypal_Response {
 				if ( $order->get_total() != $amount ) {
 =======
 			if ( 'completed' === $status ) {
+<<<<<<< HEAD
 				if ( $order->get_total() !== $amount ) {
 >>>>>>> 4ad0fbd5217e8fc7ecb454fbed049b6092b28464
+=======
+				if ( number_format( $order->get_total(), 2, '.', '' ) !== number_format( $amount, 2, '.', '' ) ) {
+>>>>>>> 176965d13952e65e432cfe27ac9831eb116308af
 					WC_Gateway_Paypal::log( 'Payment error: Amounts do not match (amt ' . $amount . ')', 'error' );
 					/* translators: 1: Payment amount */
 					$this->payment_on_hold( $order, sprintf( __( 'Validation error: PayPal amounts do not match (amt %s).', 'woocommerce' ), $amount ) );

@@ -20,10 +20,14 @@ $row_class    = apply_filters( 'woocommerce_admin_html_order_item_class', ! empt
 	<td class="name" data-sort-value="<?php echo esc_attr( $item->get_name() ); ?>">
 		<?php
 <<<<<<< HEAD
+<<<<<<< HEAD
 			echo $product_link ? '<a href="' . esc_url( $product_link ) . '" class="wc-order-item-name">' . esc_html( $item->get_name() ) . '</a>' : '<div class="wc-order-item-name">' . esc_html( $item->get_name() ) . '</div>';
 =======
 		echo $product_link ? '<a href="' . esc_url( $product_link ) . '" class="wc-order-item-name">' . esc_html( $item->get_name() ) . '</a>' : '<div class="wc-order-item-name">' . esc_html( $item->get_name() ) . '</div>';
 >>>>>>> 4ad0fbd5217e8fc7ecb454fbed049b6092b28464
+=======
+		echo $product_link ? '<a href="' . esc_url( $product_link ) . '" class="wc-order-item-name">' . wp_kses_post( $item->get_name() ) . '</a>' : '<div class="wc-order-item-name">' . wp_kses_post( $item->get_name() ) . '</div>';
+>>>>>>> 176965d13952e65e432cfe27ac9831eb116308af
 
 		if ( $product && $product->get_sku() ) {
 			echo '<div class="wc-order-item-sku"><strong>' . esc_html__( 'SKU:', 'woocommerce' ) . '</strong> ' . esc_html( $product->get_sku() ) . '</div>';

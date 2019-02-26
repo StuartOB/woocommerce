@@ -91,6 +91,7 @@ class WC_Admin_Setup_Wizard {
 	protected function is_default_theme() {
 		return wc_is_active_theme(
 			array(
+				'twentynineteen',
 				'twentyseventeen',
 				'twentysixteen',
 				'twentyfifteen',
@@ -520,10 +521,14 @@ class WC_Admin_Setup_Wizard {
 			</select>
 			<script type="text/javascript">
 <<<<<<< HEAD
+<<<<<<< HEAD
 				var wc_setup_currencies = <?php echo json_encode( $currency_by_country ); ?>;
 			</script>
 =======
 				var wc_setup_currencies = <?php echo wp_json_encode( $currency_by_country ); ?>;
+=======
+				var wc_setup_currencies = JSON.parse( decodeURIComponent( '<?php echo rawurlencode( wp_json_encode( $currency_by_country ) ); ?>' ) );
+>>>>>>> 176965d13952e65e432cfe27ac9831eb116308af
 				var wc_base_state       = "<?php echo esc_js( $state ); ?>";
 			</script>
 			</div>
@@ -936,7 +941,7 @@ class WC_Admin_Setup_Wizard {
 					id="<?php echo esc_attr( "{$input_prefix}[method]" ); ?>"
 					name="<?php echo esc_attr( "{$input_prefix}[method]" ); ?>"
 					class="method wc-enhanced-select"
-					data-plugins="<?php echo esc_attr( wp_json_encode( $this->get_wcs_requisite_plugins() ) ); ?>"
+					data-plugins="<?php echo wc_esc_json( wp_json_encode( $this->get_wcs_requisite_plugins() ) ); ?>"
 				>
 				<?php foreach ( $shipping_methods as $method_id => $method ) : ?>
 					<option value="<?php echo esc_attr( $method_id ); ?>" <?php selected( $selected, $method_id ); ?>><?php echo esc_html( $method['name'] ); ?></option>
@@ -1275,12 +1280,19 @@ class WC_Admin_Setup_Wizard {
 		check_admin_referer( 'wc-setup' );
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 		// If going through this step again, remove the live rates options
 		// in case the user saved different settings this time
 		delete_option( 'woocommerce_setup_domestic_live_rates_zone' );
 		delete_option( 'woocommerce_setup_intl_live_rates_zone' );
 
 =======
+=======
+		if ( ! did_action( 'rest_api_init' ) ) {
+			WC()->api->rest_api_includes();
+		}
+
+>>>>>>> 176965d13952e65e432cfe27ac9831eb116308af
 		// @codingStandardsIgnoreStart
 >>>>>>> 4ad0fbd5217e8fc7ecb454fbed049b6092b28464
 		$setup_domestic   = isset( $_POST['shipping_zones']['domestic']['enabled'] ) && ( 'yes' === $_POST['shipping_zones']['domestic']['enabled'] );
@@ -1307,16 +1319,19 @@ class WC_Admin_Setup_Wizard {
 		$setup_shipstation = isset( $_POST['setup_shipstation'] ) && 'yes' === $_POST['setup_shipstation'];
 >>>>>>> 4ad0fbd5217e8fc7ecb454fbed049b6092b28464
 
+		update_option( 'woocommerce_setup_shipping_labels', $setup_wcs_labels );
+
 		if ( $setup_wcs_labels ) {
 			$this->install_woocommerce_services();
 		}
 
 		if ( $setup_shipstation ) {
 			$this->install_plugin(
-				'woocommerce-shipstation',
+				'woocommerce-shipstation-integration',
 				array(
 					'name'      => __( 'ShipStation', 'woocommerce' ),
-					'repo-slug' => 'woocommerce-shipstation',
+					'repo-slug' => 'woocommerce-shipstation-integration',
+					'file'      => 'woocommerce-shipstation.php',
 				)
 			);
 		}
@@ -1912,9 +1927,13 @@ class WC_Admin_Setup_Wizard {
 									<?php echo ( $setting['required'] ) ? 'required' : ''; ?>
 									<?php echo $is_checkbox ? checked( isset( $checked ) && $checked, true, false ) : ''; ?>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 									data-plugins="<?php echo esc_attr( wp_json_encode( isset( $setting['plugins'] ) ? $setting['plugins'] : null ) ); ?>"
 >>>>>>> 4ad0fbd5217e8fc7ecb454fbed049b6092b28464
+=======
+									data-plugins="<?php echo wc_esc_json( wp_json_encode( isset( $setting['plugins'] ) ? $setting['plugins'] : null ) ); ?>"
+>>>>>>> 176965d13952e65e432cfe27ac9831eb116308af
 								/>
 								<?php if ( ! empty( $setting['description'] ) ) : ?>
 									<span class="wc-wizard-service-settings-description"><?php echo esc_html( $setting['description'] ); ?></span>
@@ -1932,9 +1951,13 @@ class WC_Admin_Setup_Wizard {
 						name="wc-wizard-service-<?php echo esc_attr( $item_id ); ?>-enabled"
 						value="yes" <?php checked( $should_enable_toggle ); ?>
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 						data-plugins="<?php echo esc_attr( wp_json_encode( $plugins ) ); ?>"
 >>>>>>> 4ad0fbd5217e8fc7ecb454fbed049b6092b28464
+=======
+						data-plugins="<?php echo wc_esc_json( wp_json_encode( $plugins ) ); ?>"
+>>>>>>> 176965d13952e65e432cfe27ac9831eb116308af
 					/>
 					<label for="wc-wizard-service-<?php echo esc_attr( $item_id ); ?>">
 				</span>
@@ -2108,7 +2131,7 @@ class WC_Admin_Setup_Wizard {
 				name="<?php echo esc_attr( 'setup_' . $type ); ?>"
 				value="yes"
 				checked
-				data-plugins="<?php echo esc_attr( wp_json_encode( isset( $item_info['plugins'] ) ? $item_info['plugins'] : null ) ); ?>"
+				data-plugins="<?php echo wc_esc_json( wp_json_encode( isset( $item_info['plugins'] ) ? $item_info['plugins'] : null ) ); ?>"
 			/>
 			<label for="<?php echo esc_attr( 'wc_recommended_' . $type ); ?>">
 				<img
@@ -2239,11 +2262,11 @@ class WC_Admin_Setup_Wizard {
 				if ( $this->should_show_mailchimp() ) :
 					$this->display_recommended_item( array(
 						'type'        => 'mailchimp',
-						'title'       => __( 'MailChimp', 'woocommerce' ),
-						'description' => __( 'Join the 16 million customers who use MailChimp. Sync list and store data to send automated emails, and targeted campaigns.', 'woocommerce' ),
+						'title'       => __( 'Mailchimp', 'woocommerce' ),
+						'description' => __( 'Join the 16 million customers who use Mailchimp. Sync list and store data to send automated emails, and targeted campaigns.', 'woocommerce' ),
 						'img_url'     => WC()->plugin_url() . '/assets/images/obw-mailchimp-icon.svg',
-						'img_alt'     => __( 'MailChimp icon', 'woocommerce' ),
-						'plugins'     => array( array( 'name' => __( 'MailChimp for WooCommerce', 'woocommerce' ), 'slug' => 'mailchimp-for-woocommerce' ) ),
+						'img_alt'     => __( 'Mailchimp icon', 'woocommerce' ),
+						'plugins'     => array( array( 'name' => __( 'Mailchimp for WooCommerce', 'woocommerce' ), 'slug' => 'mailchimp-for-woocommerce' ) ),
 					) );
 				endif;
 			?>
@@ -2352,33 +2375,30 @@ class WC_Admin_Setup_Wizard {
 		$ppec_enabled    = is_array( $ppec_settings )
 			&& isset( $ppec_settings['reroute_requests'] ) && 'yes' === $ppec_settings['reroute_requests']
 			&& isset( $ppec_settings['enabled'] ) && 'yes' === $ppec_settings['enabled'];
+
 		$features['payment'] = $stripe_enabled || $ppec_enabled;
-
-		$features['taxes'] = (bool) get_option( 'woocommerce_setup_automated_taxes', false );
-
-		$domestic_rates  = (bool) get_option( 'woocommerce_setup_domestic_live_rates_zone', false );
-		$intl_rates      = (bool) get_option( 'woocommerce_setup_intl_live_rates_zone', false );
-		$features['rates'] = $domestic_rates || $intl_rates;
+		$features['taxes']   = (bool) get_option( 'woocommerce_setup_automated_taxes', false );
+		$features['labels']  = (bool) get_option( 'woocommerce_setup_shipping_labels', false );
 
 		return $features;
 	}
 
 	protected function wc_setup_activate_get_feature_list_str() {
 		$features = $this->wc_setup_activate_get_feature_list();
-		if ( $features['payment'] && $features['taxes'] && $features['rates'] ) {
-			return __( 'payment setup, automated taxes, live rates and discounted shipping labels', 'woocommerce' );
+		if ( $features['payment'] && $features['taxes'] && $features['labels'] ) {
+			return __( 'payment setup, automated taxes and discounted shipping labels', 'woocommerce' );
 		} else if ( $features['payment'] && $features['taxes'] ) {
 			return __( 'payment setup and automated taxes', 'woocommerce' );
-		} else if ( $features['payment'] && $features['rates'] ) {
-			return __( 'payment setup, live rates and discounted shipping labels', 'woocommerce' );
+		} else if ( $features['payment'] && $features['labels'] ) {
+			return __( 'payment setup and discounted shipping labels', 'woocommerce' );
 		} else if ( $features['payment'] ) {
 			return __( 'payment setup', 'woocommerce' );
-		} else if ( $features['taxes'] && $features['rates'] ) {
-			return __( 'automated taxes, live rates and discounted shipping labels', 'woocommerce' );
+		} else if ( $features['taxes'] && $features['labels'] ) {
+			return __( 'automated taxes and discounted shipping labels', 'woocommerce' );
 		} else if ( $features['taxes'] ) {
 			return __( 'automated taxes', 'woocommerce' );
-		} else if ( $features['rates'] ) {
-			return __( 'live rates and discounted shipping labels', 'woocommerce' );
+		} else if ( $features['labels'] ) {
+			return __( 'discounted shipping labels', 'woocommerce' );
 		}
 		return false;
 	}

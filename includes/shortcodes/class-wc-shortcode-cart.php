@@ -22,7 +22,7 @@ class WC_Shortcode_Cart {
 	 */
 	public static function calculate_shipping() {
 		try {
-			WC()->shipping->reset_shipping();
+			WC()->shipping()->reset_shipping();
 
 <<<<<<< HEAD
 			$country  = wc_clean( wp_unslash( $_POST['calc_shipping_country'] ) );
@@ -47,7 +47,7 @@ class WC_Shortcode_Cart {
 			}
 
 			if ( $address['country'] ) {
-				WC()->customer->set_location( $address['country'], $address['state'], $address['postcode'], $address['city'] );
+				WC()->customer->set_billing_location( $address['country'], $address['state'], $address['postcode'], $address['city'] );
 				WC()->customer->set_shipping_location( $address['country'], $address['state'], $address['postcode'], $address['city'] );
 			} else {
 				WC()->customer->set_billing_address_to_base();

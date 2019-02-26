@@ -7,9 +7,14 @@ Tested up to: 4.9
 Stable tag: 3.2.5
 =======
 Requires at least: 4.7
+<<<<<<< HEAD
 Tested up to: 4.9
 Stable tag: 3.4.5
 >>>>>>> 4ad0fbd5217e8fc7ecb454fbed049b6092b28464
+=======
+Tested up to: 5.0
+Stable tag: 3.5.0
+>>>>>>> 176965d13952e65e432cfe27ac9831eb116308af
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 

@@ -75,7 +75,7 @@ if ( ! class_exists( 'WC_Email_Customer_Processing_Order', false ) ) :
 		 * @return string
 		 */
 		public function get_default_subject() {
-			return __( 'Payment received for your order', 'woocommerce' );
+			return __( 'Your {site_title} order has been received!', 'woocommerce' );
 		}
 
 <<<<<<< HEAD
@@ -93,7 +93,7 @@ if ( ! class_exists( 'WC_Email_Customer_Processing_Order', false ) ) :
 		 * @return string
 		 */
 		public function get_default_heading() {
-			return __( 'Thank you for your payment', 'woocommerce' );
+			return __( 'Thank you for your order', 'woocommerce' );
 		}
 
 		/**
@@ -131,7 +131,8 @@ if ( ! class_exists( 'WC_Email_Customer_Processing_Order', false ) ) :
 		 */
 		public function get_content_html() {
 			return wc_get_template_html(
-				$this->template_html, array(
+				$this->template_html,
+				array(
 					'order'         => $this->object,
 					'email_heading' => $this->get_heading(),
 					'sent_to_admin' => false,
@@ -148,7 +149,8 @@ if ( ! class_exists( 'WC_Email_Customer_Processing_Order', false ) ) :
 		 */
 		public function get_content_plain() {
 			return wc_get_template_html(
-				$this->template_plain, array(
+				$this->template_plain,
+				array(
 					'order'         => $this->object,
 					'email_heading' => $this->get_heading(),
 					'sent_to_admin' => false,

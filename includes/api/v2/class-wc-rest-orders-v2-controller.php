@@ -58,7 +58,9 @@ class WC_REST_Orders_V2_Controller extends WC_REST_Legacy_Orders_Controller {
 	 */
 	public function register_routes() {
 		register_rest_route(
-			$this->namespace, '/' . $this->rest_base, array(
+			$this->namespace,
+			'/' . $this->rest_base,
+			array(
 				array(
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => array( $this, 'get_items' ),
@@ -76,7 +78,9 @@ class WC_REST_Orders_V2_Controller extends WC_REST_Legacy_Orders_Controller {
 		);
 
 		register_rest_route(
-			$this->namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', array(
+			$this->namespace,
+			'/' . $this->rest_base . '/(?P<id>[\d]+)',
+			array(
 				'args'   => array(
 					'id' => array(
 						'description' => __( 'Unique identifier for the resource.', 'woocommerce' ),
@@ -114,7 +118,9 @@ class WC_REST_Orders_V2_Controller extends WC_REST_Legacy_Orders_Controller {
 		);
 
 		register_rest_route(
-			$this->namespace, '/' . $this->rest_base . '/batch', array(
+			$this->namespace,
+			'/' . $this->rest_base . '/batch',
+			array(
 				array(
 					'methods'             => WP_REST_Server::EDITABLE,
 					'callback'            => array( $this, 'batch_items' ),
@@ -367,32 +373,26 @@ class WC_REST_Orders_V2_Controller extends WC_REST_Legacy_Orders_Controller {
 		}
 
 		if ( isset( $request['customer'] ) ) {
-			// On WC 3.5.0 the ID of the user that placed the order was moved from the post meta _customer_user to the post_author field in the wp_posts table.
-			if ( version_compare( get_option( 'woocommerce_db_version' ), '3.5.0', '>=' ) ) {
-				$args['author'] = $request['customer'];
-			} else {
-				if ( ! empty( $args['meta_query'] ) ) {
-					$args['meta_query'] = array(); // WPCS: slow query ok.
-				}
-
-				$args['meta_query'][] = array(
-					'key'   => '_customer_user',
-					'value' => $request['customer'],
-					'type'  => 'NUMERIC',
-				);
+			if ( ! empty( $args['meta_query'] ) ) {
+				$args['meta_query'] = array(); // WPCS: slow query ok.
 			}
+
+			$args['meta_query'][] = array(
+				'key'   => '_customer_user',
+				'value' => $request['customer'],
+				'type'  => 'NUMERIC',
+			);
 		}
 
 		// Search by product.
 		if ( ! empty( $request['product'] ) ) {
 			$order_ids = $wpdb->get_col(
 				$wpdb->prepare(
-					"
-				SELECT order_id
-				FROM {$wpdb->prefix}woocommerce_order_items
-				WHERE order_item_id IN ( SELECT order_item_id FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE meta_key = '_product_id' AND meta_value = %d )
-				AND order_item_type = 'line_item'
-			 ", $request['product']
+					"SELECT order_id
+					FROM {$wpdb->prefix}woocommerce_order_items
+					WHERE order_item_id IN ( SELECT order_item_id FROM {$wpdb->prefix}woocommerce_order_itemmeta WHERE meta_key = '_product_id' AND meta_value = %d )
+					AND order_item_type = 'line_item'",
+					$request['product']
 				)
 			);
 
@@ -534,7 +534,7 @@ class WC_REST_Orders_V2_Controller extends WC_REST_Legacy_Orders_Controller {
 
 				// Make sure customer is part of blog.
 				if ( is_multisite() && ! is_user_member_of_blog( $request['customer_id'] ) ) {
-					throw new WC_REST_Exception( 'woocommerce_rest_invalid_customer_id_network', __( 'Customer ID does not belong to this site.', 'woocommerce' ), 400 );
+					add_user_to_blog( get_current_blog_id(), $request['customer_id'], 'customer' );
 				}
 			}
 
@@ -1108,6 +1108,9 @@ class WC_REST_Orders_V2_Controller extends WC_REST_Legacy_Orders_Controller {
 					'description' => __( 'Payment method title.', 'woocommerce' ),
 					'type'        => 'string',
 					'context'     => array( 'view', 'edit' ),
+					'arg_options' => array(
+						'sanitize_callback' => 'sanitize_text_field',
+					),
 				),
 				'transaction_id'       => array(
 					'description' => __( 'Unique transaction ID.', 'woocommerce' ),

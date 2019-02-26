@@ -247,6 +247,8 @@ function wc_increase_stock_levels( $order_id ) {
 		return;
 	}
 
+	$changes = array();
+
 	// Loop over all items.
 	foreach ( $order->get_items() as $item ) {
 		if ( ! $item->is_type( 'line_item' ) ) {
@@ -308,7 +310,7 @@ function wc_get_held_stock_quantity( $product, $exclude_order_id = 0 ) {
 			AND 	posts.post_type             IN ( '" . implode( "','", wc_get_order_types() ) . "' )
 			AND 	posts.post_status           = 'wc-pending'
 			AND		posts.ID                    != %d;",
-			'variation' === get_post_type( $product->get_stock_managed_by_id() ) ? '_variation_id' : '_product_id',
+			'product_variation' === get_post_type( $product->get_stock_managed_by_id() ) ? '_variation_id' : '_product_id',
 			$product->get_stock_managed_by_id(),
 			$exclude_order_id
 		)
